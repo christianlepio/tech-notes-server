@@ -3,9 +3,14 @@ const app = express()
 const path = require('path')
 const PORT = process.env.PORT || 3500 
 
+// ability to process JSON (built in middleware)
+// this will let the app recieve and parse .json data
+app.use(express.json())
+
 // listen for the root route ('/')
 // serve static files such as css, images, etc.
 // dirname here is the file path of this server.js
+// express.static() is a built in middleware
 app.use('/', express.static(path.join(__dirname, 'public')))
 
 // index route
