@@ -3,8 +3,8 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const path = require('path')
-// import logger to log the requests of a user
-const { logger } = require('./middleware/logger')
+// import logger, logEvents to log the requests of a user
+const { logger, logEvents } = require('./middleware/logger')
 // import error handler to log in error.log file
 const errorHandler = require('./middleware/errorHandler')
 // import cookie-parser
@@ -13,10 +13,19 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 // import cors options to attach in cors 3rd party middleware
 const corsOptions = require('./config/corsOptions')
+// import connectDB function
+const connectDB = require('./config/dbConn')
+// import mongoose
+const mongoose = require('mongoose')
+
+// define PORT
 const PORT = process.env.PORT || 3500 
 
 // pull out env variables (only for testing)
 console.log('NODE_ENV: ', process.env.NODE_ENV)
+
+// connect to mongoDB
+connectDB()
 
 // use logger function from start of request
 // this is a custom middleware
@@ -65,4 +74,22 @@ app.all('*', (req, res) => {
 // this is a custom middleware
 app.use(errorHandler)
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+// listen for the connected event of mongoose
+// listen for this event once
+// listen for the event open, meaning if app success to connect to mongoDB
+mongoose.connection.once('open', () => {
+    console.log('Connected to MongoDB')
+
+    // listen to the app once mongoDB connection success
+    // web creates a server that listens on port you define on your computer
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+})
+
+// one other listener
+// this will listen for an error with the mongoDB connection
+mongoose.connection.on('error', err => {
+    console.log('MongoDB connection error: ', err)
+
+    // log the mongoDB connection error to file mongoErrLog.log
+    logEvents(`${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`, 'mongoErrLog.log')
+})
