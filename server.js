@@ -9,6 +9,8 @@ const errorHandler = require('./middleware/errorHandler')
 const cookieParser = require('cookie-parser')
 // import Cross-Origin Resource Sharing
 const cors = require('cors')
+// import cors options to attach in cors 3rd party middleware
+const corsOptions = require('./config/corsOptions')
 const PORT = process.env.PORT || 3500 
 
 // use logger function from start of request
@@ -17,7 +19,7 @@ app.use(logger)
 
 // implement 3rd party middleware
 // Cross Origin Resource Sharing (CORS)
-app.use(cors())
+app.use(cors(corsOptions))
 
 // ability to process JSON (built in middleware)
 // this will let the app recieve and parse .json data
