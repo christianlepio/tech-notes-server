@@ -51,6 +51,8 @@ app.use('/', express.static(path.join(__dirname, 'public')))
 // index route
 // requesting for index page
 app.use('/', require('./routes/root'))
+// route endpoint for requesting users
+app.use('/users', require('./routes/userRoutes'))
 
 // catch 404 page not found
 app.all('*', (req, res) => {
