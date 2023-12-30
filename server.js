@@ -17,6 +17,9 @@ app.use(logger)
 // this will let the app recieve and parse .json data
 app.use(express.json())
 
+// implement 3rd party middleware (cookie-parser)
+app.use(cookieParser())
+
 // listen for the root route ('/')
 // serve static files such as css, images, etc.
 // dirname here is the file path of this server.js
