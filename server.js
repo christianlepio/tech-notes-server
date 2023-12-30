@@ -1,7 +1,12 @@
 const express = require('express')
 const app = express()
 const path = require('path')
+// import logger to log the requests of a user
+const { logger } = require('./middleware/logger')
 const PORT = process.env.PORT || 3500 
+
+// use logger function from start of request
+app.use(logger)
 
 // ability to process JSON (built in middleware)
 // this will let the app recieve and parse .json data
