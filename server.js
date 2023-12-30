@@ -6,6 +6,7 @@ const { logger } = require('./middleware/logger')
 const PORT = process.env.PORT || 3500 
 
 // use logger function from start of request
+//this is a custom middleware
 app.use(logger)
 
 // ability to process JSON (built in middleware)
