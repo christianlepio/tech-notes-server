@@ -1,3 +1,5 @@
+// import dotenv to allow the code to use the environment variables
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const path = require('path')
@@ -12,6 +14,9 @@ const cors = require('cors')
 // import cors options to attach in cors 3rd party middleware
 const corsOptions = require('./config/corsOptions')
 const PORT = process.env.PORT || 3500 
+
+// pull out env variables (only for testing)
+console.log('NODE_ENV: ', process.env.NODE_ENV)
 
 // use logger function from start of request
 // this is a custom middleware
