@@ -5,6 +5,8 @@ const path = require('path')
 const { logger } = require('./middleware/logger')
 // import error handler to log in error.log file
 const errorHandler = require('./middleware/errorHandler')
+// import cookie-parser
+const cookieParser = require('cookie-parser')
 const PORT = process.env.PORT || 3500 
 
 // use logger function from start of request
