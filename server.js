@@ -3,10 +3,12 @@ const app = express()
 const path = require('path')
 // import logger to log the requests of a user
 const { logger } = require('./middleware/logger')
+// import error handler to log in error.log file
+const errorHandler = require('./middleware/errorHandler')
 const PORT = process.env.PORT || 3500 
 
 // use logger function from start of request
-//this is a custom middleware
+// this is a custom middleware
 app.use(logger)
 
 // ability to process JSON (built in middleware)
@@ -40,5 +42,9 @@ app.all('*', (req, res) => {
         res.type('txt').send('404 not found')
     }
 })
+
+// use error handler function here to log in error.log
+// this is a custom middleware
+app.use(errorHandler)
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
