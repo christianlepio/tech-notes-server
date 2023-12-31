@@ -14,3 +14,10 @@ const bcrypt = require('bcrypt')
 const getAllUsers = asyncHandler(async (req, res) => {
     
 })
+
+// @desc create new user
+// @route POST /users
+// @access Private
+const createNewUser = asyncHandler(async (req, res) => {
+
+})
