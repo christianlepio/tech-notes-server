@@ -112,6 +112,32 @@ const updateUser = asyncHandler(async (req, res) => {
 // @route DELETE /users
 // @access Private
 const deleteUser = asyncHandler(async (req, res) => {
+    // get id from request body by destructuring
+    const { id } = req.body
+
+    if (!id) {
+        return res.status(400).json({ message: 'id property is missing!' }) // 400 bad request
+    }
+
+    // check for notes collection 1st, do not delete a user that has an assigned notes
+    const notes = await Note.findOne({ user: id }).lean().exec()
+    if (notes?.length) {
+        return res.status(400).json({ message: 'User has assigned notes!' }) // 400 bad request
+    }
+
+    // if user has no assigned notes then find the user in the database that is going to be deleted
+    const user = await User.findById(id).exec()
+    if (!user) {
+        return res.status(400).json({ message: 'User does not exist!' }) // 400 bad request
+    }
+
+    // if there is user found then delete that user data
+    const result = await User.deleteOne()
+
+    // reply
+    const reply = `Username: ${result.username} with ID: ${result._id} deleted!`
+
+    res.json(reply)
 
 })
 
