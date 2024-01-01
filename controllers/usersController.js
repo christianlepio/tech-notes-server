@@ -21,3 +21,25 @@ const getAllUsers = asyncHandler(async (req, res) => {
 const createNewUser = asyncHandler(async (req, res) => {
 
 })
+
+// @desc update a user
+// @route PATCH /users
+// @access Private
+const updateUser = asyncHandler(async (req, res) => {
+
+})
+
+// @desc delete a user
+// @route DELETE /users
+// @access Private
+const deleteUser = asyncHandler(async (req, res) => {
+
+})
+
+// these exports will be used by the userRoutes js
+module.exports = {
+    getAllUsers,
+    createNewUser,
+    updateUser,
+    deleteUser
+}
