@@ -10,7 +10,7 @@ const corsOptions = {
         // !origin means it allows postman to access the REST API
         if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
             // null here means there's no error, true means that the origin will sent back and that is allowed
-            callback(nul, true)
+            callback(null, true)
         } else {
             callback(new Error('Not allowed by CORS'))
         }
