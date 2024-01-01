@@ -12,7 +12,16 @@ const bcrypt = require('bcrypt')
 // @route GET /users
 // @access Private
 const getAllUsers = asyncHandler(async (req, res) => {
-    
+    // this will select all users & fields except for the password field
+    // with lean() method, mongoose will send data that has no extra functions like save document and 
+    // others it will send json data that has no extra functions/methods included
+    const users = await User.find().select('-password').lean()
+
+    if (!users) {
+        return res.status(400).json({ message: 'No Users found!' })
+    }
+    // send users as a response if there are selected users.
+    res.json(users)
 })
 
 // @desc create new user
