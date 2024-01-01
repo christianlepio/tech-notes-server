@@ -132,12 +132,12 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 
     // if there is user found then delete that user data
-    const result = await User.deleteOne()
-
+    const result = await user.deleteOne()
+    console.log('userDelete result: ', result)
     // reply message after deleting a user data
-    const reply = `Username: ${result.username} with ID: ${result._id} deleted!`
+    const reply = `Username: ${user.username} with ID: ${user._id} deleted!`
 
-    res.json(reply)
+    res.json({reply})
 
 })
 
