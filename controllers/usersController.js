@@ -18,7 +18,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
     // others it will send json data that has no extra functions/methods included
     const users = await User.find().select('-password').lean()
 
-    if (!users) {
+    if (!users?.length) {
         return res.status(400).json({ message: 'No Users found!' }) // 400 bad request
     }
     // send users as a response if there are selected users.
