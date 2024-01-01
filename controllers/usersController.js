@@ -4,7 +4,7 @@ const Note = require('../models/Note')
 // import express-async-handler
 // this is a utility function that simplifies error handling in asynchronous 
 // express js middleware and route handlers
-// asyncHandler will let you not to use try catch block of codes
+// asyncHandler will let you not to use try catch block of codes because it will automatically catches error
 const asyncHandler = require('express-async-handler')
 // import bcrypt to encrypt password value
 const bcrypt = require('bcrypt')
@@ -70,7 +70,7 @@ const updateUser = asyncHandler(async (req, res) => {
 
     // confirm data
                                         // if roles is not an array             & data type of active is not a boolean
-    if (!id || !username || !password || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
+    if (!id || !username || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
         return res.status(400).json({ message: 'All fields are required!' }) // 400 bad request
     }
 
