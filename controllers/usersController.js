@@ -120,8 +120,8 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 
     // check for notes collection 1st, do not delete a user that has an assigned notes
-    const notes = await Note.findOne({ user: id }).lean().exec()
-    if (notes?.length) {
+    const note = await Note.findOne({ user: id }).lean().exec()
+    if (note) {
         return res.status(400).json({ message: 'User has assigned notes!' }) // 400 bad request
     }
 
