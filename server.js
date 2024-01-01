@@ -53,6 +53,8 @@ app.use('/', express.static(path.join(__dirname, 'public')))
 app.use('/', require('./routes/root'))
 // route endpoint for requesting users
 app.use('/users', require('./routes/userRoutes'))
+// route endpoint for requesting notes
+app.use('/notes', require('./routes/noteRoutes'))
 
 // catch 404 page not found
 app.all('*', (req, res) => {
