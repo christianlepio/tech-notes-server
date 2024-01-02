@@ -35,7 +35,28 @@ const getAllNotes = asyncHandler(async (req, res) => {
 // @route POST /notes
 // @access Private
 const createNewNote = asyncHandler(async (req, res) => {
-    
+    // get data from request body by destructuring
+    const { user, title, text } = req.body
+
+    // confirm data
+    if (!user || !title || !text) {
+        return res.status(400).json({ message: 'All fields are required!' }) // 400 - bad request
+    }
+
+    // if data was confirmed, check for note's title duplicates
+    const duplicated = await Note.findOne({ title }).lean().exec()
+    if (duplicated) {
+        return res.status(409).json({ message: "Note's title already exists!" }) // 409 - conflict
+    }
+
+    // if there is no duplicated note's title then create new note and store to techNotesDB/notes collection (mongoDB)
+    const note = await Note.create({ user, title, text })
+
+    if (note) { // note was successfully created
+        res.status(201).json({ message: `New note ${title} created!` }) 
+    } else {
+        res.status(400).json({ message: "Invalid received note's data!" }) // 400 - bad request
+    }
 })
 
 // @desc update a note
