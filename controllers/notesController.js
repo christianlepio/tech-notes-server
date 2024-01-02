@@ -105,7 +105,27 @@ const updateNote = asyncHandler(async (req, res) => {
 // @route DELETE /notes
 // @access Private
 const deleteNote = asyncHandler(async (req, res) => {
-    
+    // get data from request body by destructuring
+    const { id } = req.body
+
+    // confirm data
+    if (!id) {
+        return res.status(400).json({ message: 'ID property is missing!' }) // 400 - bad request
+    }
+
+    // if data was confirmed
+    const note = await Note.findById(id).exec()
+    if (!note) {
+        return res.status(400).json({ message: 'Note does not exist!' }) // 400 - bad request
+    }
+
+    // if note exist, then delete that note
+    const result = await note.deleteOne()
+    console.log('noteDelete result: ', result)
+    // reply message after deleting note
+    const reply = `Note: '${note.title}' with ID: ${note._id} deleted!`
+
+    res.json(reply)
 })
 
 // these exports will be used by the noteRoutes js
