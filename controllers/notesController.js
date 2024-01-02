@@ -13,7 +13,24 @@ const bcrypt = require('bcrypt')
 // @route GET /notes
 // @access Private
 const getAllNotes = asyncHandler(async (req, res) => {
+    // this will select all notes from techNotesDB/notes (mongoDB) collection
+    // with lean() method, mongoose will send data that has no extra functions like save document and 
+    // others, it will only send data that has no extra functions/methods included
+    const notes = await Note.find().lean()
 
+    if (!notes?.length) {
+        return res.status(400).json({ message: 'No notes found in the DB!' }) // 400 - bad request
+    }
+
+    // if there is/are notes found, add designated username each note before sending as response to client
+    const notesWithUser = await Promise.all(notes.map(async (note) => {
+        // find user by id, note.user is holding a value for user id
+        const user = await User.findById(note.user).lean().exec()
+        return { ...note, username: user.username }
+    }))
+
+    // send notes with username response to the client 
+    res.json(notesWithUser)
 })
 
 // @desc create new note
