@@ -137,7 +137,7 @@ const deleteUser = asyncHandler(async (req, res) => {
     // reply message after deleting a user data
     const reply = `Username: ${user.username} with ID: ${user._id} deleted!`
 
-    res.json({reply})
+    res.json(reply)
 
 })
 
