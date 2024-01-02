@@ -63,7 +63,42 @@ const createNewNote = asyncHandler(async (req, res) => {
 // @route PATCH /notes
 // @access Private
 const updateNote = asyncHandler(async (req, res) => {
-    
+    // get data from request body by destructuring
+    const { id, user, title, text, completed } = req.body
+
+    // confirm data
+                                        // check if completed data type is boolean
+    if (!id || !user || !title || !text || typeof completed !== 'boolean') {
+        return res.status(400).json({ message: 'All fields are required!' }) // 400 - bad request
+    }
+
+    // if data was confirmed, find that specific note from DB
+    // exec() method means it will attach other methods to the response document such as save() method
+    const note = await Note.findById(id).exec()
+
+    // check if there is no notes found
+    if (!note) {
+        return res.status(400).json({ message: 'No notes found!' }) // 400 - bad request
+    }
+
+    // if there is note found, check for duplicated note's title
+    const duplicated = await Note.findOne({ title }).lean().exec()
+
+    // this will allow updates to its target note
+    if (duplicated && duplicated?._id.toString() !== id) {
+        return res.status(409).json({ message: "Note's title already exist!" }) // 409 - conflict
+    }
+
+    // if there is no duplicated note's title then update note's data
+    note.user = user
+    note.title = title
+    note.text = text
+    note.completed = completed
+
+    // save updated note's data to mongoDB (techNotesDB/notes)
+    const updatedNote = await note.save()
+
+    res.json({ message: `${updatedNote.title} updated!` })
 })
 
 // @desc delete a note
