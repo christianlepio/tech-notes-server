@@ -6,8 +6,6 @@ const Note = require('../models/Note')
 // express js middleware and route handlers
 // asyncHandler will let you not to use try catch block of codes because it will automatically catches error
 const asyncHandler = require('express-async-handler')
-// import bcrypt to encrypt password value
-const bcrypt = require('bcrypt')
 
 // @desc Get all notes
 // @route GET /notes
