@@ -119,7 +119,21 @@ const refresh = (req, res) => {
 // @route POST /auth/logout 
 // @access Public - clear cookie if exists
 const logout = (req, res) => {
-    // do stuff here
+    // get cookies from client
+    const cookies = req.cookies
+
+    // if there's no cookie named jwt then send status 204 - success but no content
+    if (!cookies?.jwt) return res.sendStatus(204) // 204 - success but no content
+
+    // if there is cookie then clear cookie named jwt
+    res.clearCookie('jwt', {
+        httpOnly: true, 
+        sameSite: 'None', 
+        secure: true
+    })
+
+    // send message to client
+    res.json({ message: 'Cookie Cleared!' })
 }
 
 module.exports = {
