@@ -69,8 +69,49 @@ const login = asyncHandler(async (req, res) => {
 // @desc get refesh token 
 // @route GET /auth/refresh 
 // @access Public - because access token has expiration
+// this function will issued new access token if the refresh token still not expired
 const refresh = (req, res) => {
-    // do stuff here
+    // get cookies jwt
+    const cookies = req.cookies
+
+    // check if there is no cookies named 'jwt' received
+    if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized!' }) // 401 - unauthorized status
+
+    // if there is jwt cookie then get the refresh token value
+    const refreshToken = cookies.jwt
+
+    // verify the refresh token using jwt verify method
+    jwt.verify(
+        refreshToken, // required
+        process.env.REFRESH_TOKEN_SECRET, // required
+        asyncHandler(async (err, decoded) => {
+            // if jwt verify has failed then it will handle by err variable
+            if (err) return res.status(403).json({ message: 'Forbidden!' }) // 403 - forbidden
+
+            // if there's no error, then find user from User collection (mongoDB)
+            const foundUser = await User.findOne({ username: decoded.username })
+
+            // if no found user, then set response status to 401 - unauthorized
+            if (!foundUser) return res.status(401).json({ message: 'Unauthorized!' }) // 401 - unauthorized
+
+            // if there is user found from mongoDB then request new access token again
+            const accessToken = jwt.sign(
+                {
+                    "UserInfo": {
+                        "username": foundUser.username, 
+                        "roles": foundUser.roles
+                    }, 
+                }, 
+                process.env.ACCESS_TOKEN_SECRET, 
+                { expiresIn: '10s' }
+            )
+            
+            // send the access token as json to the client
+            res.json({ accessToken })
+
+        })
+    )
+
 }
 
 
