@@ -26,7 +26,7 @@ const verifyJWT = (req, res, next) => {
             req.user = decoded.UserInfo.username
             req.roles = decoded.UserInfo.roles
 
-            // this will allow to move to the next middleware or controller
+            // this will allow to move on the next middleware or controller
             next()
         }
     )
