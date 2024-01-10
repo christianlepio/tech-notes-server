@@ -103,7 +103,7 @@ const refresh = (req, res) => {
                     }, 
                 }, 
                 process.env.ACCESS_TOKEN_SECRET, 
-                { expiresIn: '1m' }
+                { expiresIn: '10s' }
             )
             
             // send the access token as json to the client
