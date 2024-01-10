@@ -43,7 +43,7 @@ const login = asyncHandler(async (req, res) => {
             }
         }, 
         process.env.ACCESS_TOKEN_SECRET, // this is required when issuing a token
-        { expiresIn: '10s' } // token will expires after 10 seconds
+        { expiresIn: '1m' } // token will expires after 10 seconds
     )
 
     // get refresh token using jwt sign method
@@ -103,7 +103,7 @@ const refresh = (req, res) => {
                     }, 
                 }, 
                 process.env.ACCESS_TOKEN_SECRET, 
-                { expiresIn: '10s' }
+                { expiresIn: '1m' }
             )
             
             // send the access token as json to the client

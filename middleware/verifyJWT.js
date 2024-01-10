@@ -4,9 +4,10 @@ const jwt = require('jsonwebtoken')
 const verifyJWT = (req, res, next) => {
     // get auth header access token
     const authHeader = req.headers.authorization || req.headers.Authorization
+    console.log('authHeader: ', authHeader)
 
     // check if auth header access token starts with the word 'Bearer '
-    if (!authHeader?.startsWIth('Bearer ')) {
+    if (!authHeader?.startsWith('Bearer ')) {
         return res.status(401).json({ message: 'Unauthorized!' }) // 401 - unauthorized status
     }
 
