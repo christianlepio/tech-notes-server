@@ -43,14 +43,14 @@ const login = asyncHandler(async (req, res) => {
             }
         }, 
         process.env.ACCESS_TOKEN_SECRET, // this is required when issuing a token
-        { expiresIn: '10s' } // token will expires after 10 seconds
+        { expiresIn: '15m' } // token will expires after 15 minutes
     )
 
     // get refresh token using jwt sign method
     const refreshToken = jwt.sign(
         { "username": foundUser.username }, 
         process.env.REFRESH_TOKEN_SECRET, 
-        { expiresIn: '1d' } // will expires after 1 day
+        { expiresIn: '7d' } // will expires after 7 days
     )
 
     // create secure cookie with refresh token 
@@ -103,7 +103,7 @@ const refresh = (req, res) => {
                     }, 
                 }, 
                 process.env.ACCESS_TOKEN_SECRET, 
-                { expiresIn: '10s' }
+                { expiresIn: '15m' }
             )
             
             // send the access token as json to the client
