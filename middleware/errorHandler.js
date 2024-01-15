@@ -11,7 +11,8 @@ const errorHandler = (err, req, res, next) => {
     // set the response status
     res.status(status)
     // send the response in json format
-    res.json({ message: err.message })
+    // send isError indicator with a value of true because rtk query is expecting this
+    res.json({ message: err.message, isError: true })
 }
 
 module.exports = errorHandler
