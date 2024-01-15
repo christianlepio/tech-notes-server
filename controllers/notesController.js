@@ -44,7 +44,8 @@ const createNewNote = asyncHandler(async (req, res) => {
     }
 
     // if data was confirmed, check for note's title duplicates
-    const duplicated = await Note.findOne({ title }).lean().exec()
+    // collation method will check the case sensitivity
+    const duplicated = await Note.findOne({ title }).collation({ locale: 'en', strength: 2 }).lean().exec()
     if (duplicated) {
         return res.status(409).json({ message: "Note's title already exists!" }) // 409 - conflict
     }
@@ -82,7 +83,8 @@ const updateNote = asyncHandler(async (req, res) => {
     }
 
     // if there is note found, check for duplicated note's title
-    const duplicated = await Note.findOne({ title }).lean().exec()
+    // collation method will check the case sensitivity
+    const duplicated = await Note.findOne({ title }).collation({ locale: 'en', strength: 2 }).lean().exec()
 
     // this will allow updates to its target note
     if (duplicated && duplicated?._id.toString() !== id) {
