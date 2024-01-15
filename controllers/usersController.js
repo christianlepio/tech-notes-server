@@ -5,14 +5,14 @@ const Note = require('../models/Note')
 // this is a utility function that simplifies error handling in asynchronous 
 // express js middleware and route handlers
 // asyncHandler will let you not to use try catch block of codes because it will automatically catches error
-const asyncHandler = require('express-async-handler')
+// const asyncHandler = require('express-async-handler')
 // import bcrypt to encrypt password value
 const bcrypt = require('bcrypt')
 
 // @desc Get all users
 // @route GET /users
 // @access Private
-const getAllUsers = asyncHandler(async (req, res) => {
+const getAllUsers = async (req, res) => {
     // this will select all users & fields except for the password field
     // with lean() method, mongoose will send data that has no extra functions like save document and 
     // others it will send json data that has no extra functions/methods included
@@ -23,18 +23,17 @@ const getAllUsers = asyncHandler(async (req, res) => {
     }
     // send users as a response if there are selected users.
     res.json(users)
-})
+}
 
 // @desc create new user
 // @route POST /users
 // @access Private
-const createNewUser = asyncHandler(async (req, res) => {
+const createNewUser = async (req, res) => {
     // get data from request body by destructuring
     const { username, password, roles } = req.body
 
     // confirm data 
-                                // if roles is not an array
-    if (!username || !password || !Array.isArray(roles) || !roles.length) {
+    if (!username || !password) {
         return res.status(400).json({ message: 'All fields are required!' }) // 400 bad request
     }
 
@@ -50,7 +49,9 @@ const createNewUser = asyncHandler(async (req, res) => {
     const hashedPwd = await bcrypt.hash(password, 10) // 10 is a default salt rounds for password hashing
 
     // define user object to be passed in the database
-    const userObj = { username, 'password': hashedPwd, roles }
+    const userObj = (!Array.isArray(roles) || !roles.length)
+        ? { username, 'password': hashedPwd }
+        : { username, 'password': hashedPwd, roles }
 
     // create and store new user to the database (mongoDB)
     const user = await User.create(userObj)
@@ -60,12 +61,12 @@ const createNewUser = asyncHandler(async (req, res) => {
     } else {
         res.status(400).json({ message: 'Invalid received user data!' }) // 400 bad request
     }
-})
+}
 
 // @desc update a user
 // @route PATCH /users
 // @access Private
-const updateUser = asyncHandler(async (req, res) => {
+const updateUser = async (req, res) => {
     // get data from request body by destructuring
     const { id, username, roles, active, password } = req.body
 
@@ -108,12 +109,12 @@ const updateUser = asyncHandler(async (req, res) => {
     const updatedUser = await user.save()
 
     res.json({ message: `${updatedUser.username} updated!` })
-})
+}
 
 // @desc delete a user
 // @route DELETE /users
 // @access Private
-const deleteUser = asyncHandler(async (req, res) => {
+const deleteUser = async (req, res) => {
     // get id from request body by destructuring
     const { id } = req.body
 
@@ -141,7 +142,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
     res.json(reply)
 
-})
+}
 
 // these exports will be used by the userRoutes js
 module.exports = {

@@ -5,12 +5,12 @@ const Note = require('../models/Note')
 // this is a utility function that simplifies error handling in asynchronous 
 // express js middleware and route handlers
 // asyncHandler will let you not to use try catch block of codes because it will automatically catches error
-const asyncHandler = require('express-async-handler')
+// const asyncHandler = require('express-async-handler')
 
 // @desc Get all notes
 // @route GET /notes
 // @access Private
-const getAllNotes = asyncHandler(async (req, res) => {
+const getAllNotes = async (req, res) => {
     // this will select all notes from techNotesDB/notes (mongoDB) collection
     // with lean() method, mongoose will send data that has no extra functions like save document and 
     // others, it will only send data that has no extra functions/methods included
@@ -29,12 +29,12 @@ const getAllNotes = asyncHandler(async (req, res) => {
 
     // send notes with username response to the client 
     res.json(notesWithUser)
-})
+}
 
 // @desc create new note
 // @route POST /notes
 // @access Private
-const createNewNote = asyncHandler(async (req, res) => {
+const createNewNote = async (req, res) => {
     // get data from request body by destructuring
     const { user, title, text } = req.body
 
@@ -58,12 +58,12 @@ const createNewNote = asyncHandler(async (req, res) => {
     } else {
         res.status(400).json({ message: "Invalid received note's data!" }) // 400 - bad request
     }
-})
+}
 
 // @desc update a note
 // @route PATCH /notes
 // @access Private
-const updateNote = asyncHandler(async (req, res) => {
+const updateNote = async (req, res) => {
     // get data from request body by destructuring
     const { id, user, title, text, completed } = req.body
 
@@ -101,12 +101,12 @@ const updateNote = asyncHandler(async (req, res) => {
     const updatedNote = await note.save()
 
     res.json({ message: `${updatedNote.title} updated!` })
-})
+}
 
 // @desc delete a note
 // @route DELETE /notes
 // @access Private
-const deleteNote = asyncHandler(async (req, res) => {
+const deleteNote = async (req, res) => {
     // get data from request body by destructuring
     const { id } = req.body
 
@@ -128,7 +128,7 @@ const deleteNote = asyncHandler(async (req, res) => {
     const reply = `Note: '${note.title}' with ID: ${note._id} deleted!`
 
     res.json(reply)
-})
+}
 
 // these exports will be used by the noteRoutes js
 module.exports = {

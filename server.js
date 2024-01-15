@@ -1,5 +1,8 @@
 // import dotenv to allow the code to use the environment variables
 require('dotenv').config()
+// this is an alternative for const asyncHandler = require('express-async-handler')
+// this will automatically catch errors even when u don't use try catch
+require('express-async-errors')
 const express = require('express')
 const app = express()
 const path = require('path')

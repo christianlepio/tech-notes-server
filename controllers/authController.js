@@ -5,12 +5,12 @@ const jwt = require('jsonwebtoken')
 // this is a utility function that simplifies error handling in asynchronous 
 // express js middleware and route handlers
 // asyncHandler will let you not to use try catch block of codes because it will automatically catches error
-const asyncHandler = require('express-async-handler')
+// const asyncHandler = require('express-async-handler')
 
 // @desc login 
 // @route POST /auth 
 // @access Public 
-const login = asyncHandler(async (req, res) => {
+const login = async (req, res) => {
     const { username, password } = req.body
 
     // if there is no username / password
@@ -63,7 +63,7 @@ const login = asyncHandler(async (req, res) => {
 
     // send access token containing username & roles to client
     res.json({ accessToken })
-})
+}
 
 
 // @desc get refesh token 
@@ -84,7 +84,7 @@ const refresh = (req, res) => {
     jwt.verify(
         refreshToken, // required
         process.env.REFRESH_TOKEN_SECRET, // required
-        asyncHandler(async (err, decoded) => {
+        async (err, decoded) => {
             // if jwt verify has failed then it will handle by err variable
             if (err) return res.status(403).json({ message: 'Forbidden!' }) // 403 - forbidden
 
@@ -109,7 +109,7 @@ const refresh = (req, res) => {
             // send the access token as json to the client
             res.json({ accessToken })
 
-        })
+        }
     )
 
 }
