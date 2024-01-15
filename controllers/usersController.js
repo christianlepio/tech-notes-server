@@ -39,7 +39,8 @@ const createNewUser = asyncHandler(async (req, res) => {
     }
 
     // check for username duplicates
-    const duplicate = await User.findOne({ username }).lean().exec()
+    // collation method will check the case sensitivity
+    const duplicate = await User.findOne({ username }).collation({ locale: 'en', strength: 2 }).lean().exec()
     if (duplicate) {
         return res.status(409).json({ message: 'Username already exist!' }) // 409 conflict
     }
@@ -84,7 +85,8 @@ const updateUser = asyncHandler(async (req, res) => {
     }
 
     // if there is user found then check for duplicated username
-    const duplicate = await User.findOne({ username }).lean().exec()
+    // collation method will check the case sensitivity
+    const duplicate = await User.findOne({ username }).collation({ locale: 'en', strength: 2 }).lean().exec()
 
     // allow updates to its target user
     if (duplicate && duplicate?._id.toString() !== id) {
